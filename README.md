@@ -2,9 +2,9 @@
 
 此仓库的存放的是各个版本的 Visual C++ 6.0 安装镜像, 仅为方便使用, 资源均收集于网络, 如有侵权, 敬请告知删除。
 
-* 英文版: [en-pro](https://github.com/kirino17/vc60/releases/tag/6.00) 
-* 简体中文版: [cn-enp](https://github.com/kirino17/vc60/releases/tag/6.01)
-* 命令行环境包: [compile-toolset](https://github.com/kirino17/vc60/releases/tag/6.02)
+* 英文版: [en-us](https://github.com/kirino17/vc60/releases/tag/6.00) 
+* 简体中文版: [zh-cn](https://github.com/kirino17/vc60/releases/tag/6.01)
+* 命令行环境包: [vc60env](https://github.com/kirino17/vc60/releases/tag/6.02)
 
 # 如何使用命令行环境包
 
