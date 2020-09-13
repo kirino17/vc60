@@ -30,7 +30,12 @@ powershell &E:\vc6-toolset\init.ps1
 #参数: 生成目标, 可选值: Debug | Release
 #参数: 源代码目录, 你的工程目录
 #参数: 构建目录, 用于存放cmake生成的工程文件
+
 powershell &E:\vc6-toolset\init.ps1 [项目名称] [生成目标] [源代码目录] [构建目录]
+
+#例子:
+
+powershell &E:\vc6-toolset\init.ps1 "testdemo" "Debug" "E:\testdemo\src" "E:\testdemo\build"
 
 ```
 
