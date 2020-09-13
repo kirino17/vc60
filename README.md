@@ -2,13 +2,12 @@
 
 此仓库的存放的是各个版本的 Visual C++ 6.0 安装镜像, 仅为方便使用, 资源均收集于网络, 如有侵权, 敬请告知删除。
 
-英文版: [en-pro](https://github.com/kirino17/vc60/releases/tag/6.00)
-简体中文版: [cn-enp](https://github.com/kirino17/vc60/releases/tag/6.01)
-命令行环境包: [compile-toolset](https://github.com/kirino17/vc60/releases/tag/6.02)
+* 英文版: [en-pro](https://github.com/kirino17/vc60/releases/tag/6.00) 
+* 简体中文版: [cn-enp](https://github.com/kirino17/vc60/releases/tag/6.01)
+* 命令行环境包: [compile-toolset](https://github.com/kirino17/vc60/releases/tag/6.02)
 
 # 如何使用命令行环境包
 
-## 安装
 使用命令行环境包无需安装Visual C++ 6.0, 下载仓库中的 init.ps1 脚本文件到你的电脑上, 并给它创建一个文件夹, 如:
 ```
 E:\vc6-toolset\
@@ -22,8 +21,8 @@ powershell &E:\vc6-toolset\init.ps1
 
 如果没有错误发生, 那么命令行环境包就安装好了。
 
-## 使用
-使用命令行环境包进行编译程序, 需要给你的工程项目编写一个cmake的构建脚本, 如果你已经写好了, 那么在命令行中执行下面的命令即可进行编译程序:
+使用方法:
+使用命令行编译, 需要给你的工程项目编写一个cmake的构建脚本, 如果你已经写好了, 启动命令行执行下面的命令即可开始编译:
 ```
 #这是注释
 
