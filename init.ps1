@@ -8,8 +8,6 @@ $vc60Folder             = $installFolder + "vc60\"
 $vc60DownloadFile       = $downloadFolder + "vc60.zip"
 $vc60ExecutableFolder   = $vc60Folder + "Common\MSDev98\Bin\"
 $vc60VC98Folder         = $vc60Folder + "VC98\Bin\"
-$vc60IncludeFolder      = $vc60Folder + "VC98\atl\include;" + $vc60Folder + "VC98\mfc\include;" + $vc60Folder + "VC98\include"
-$vc60LibFolder          = $vc60Folder + "VC98\mfc\lib;" + $vc60Folder + "VC98\lib"
 
 #############################################################################
 # cmake configuration
@@ -20,7 +18,49 @@ $camkeExecutableFolder  = $cmakeFolder
 
 #############################################################################
 #############################################################################
+$scriptCode = @"
+    using System;
+    using System.IO;
 
+    public class Program {
+        public static void Makefile(string readFilename, string writeFilename, string sourceName, string projectName, string targetName, string vcFolder){
+            string output = "";
+            try {
+                using (StreamReader reader = new StreamReader(readFilename)){
+                    string context = reader.ReadToEnd();
+                    output = string.Format(context, 
+                        vcFolder + `"Common`",
+                        vcFolder + `"Common\\MSDev98`",
+                        vcFolder + `"VC98`",
+                        sourceName,
+                        projectName,
+                        targetName
+                    );
+                }
+            }
+            catch(Exception e){
+                Console.Write(e.Message);
+            }
+
+            if(output.Length > 0){
+                try{
+                    using (StreamWriter writer = new StreamWriter(writeFilename)){
+                        writer.Write(output);
+                        writer.Flush();
+                        writer.Close();
+                    }
+                }
+                catch(Exception e){
+                    Console.Write(e.Message);
+                }
+            }
+        }
+    }
+"@
+
+
+
+#############################################################################
 function fetch {
     param (
         $Uri,
@@ -33,17 +73,6 @@ function fetch {
 
 }
 function installVC60 {
-
-    # 设置环境变量
-    $Env:MSDevDir = $vc60ExecutableFolder
-    $Env:include = $vc60IncludeFolder
-    $Env:lib = $vc60LibFolder
-    $pathValue = $vc60VC98Folder+";"+$vc60ExecutableFolder+";"
-
-    if($Env:Path.IndexOf($pathValue) -eq -1){
-        $Env:Path = ($pathValue+$Env:Path)
-    }
-
     do {
         # 编译环境完整性检查
         if(!((Test-Path $vc60ExecutableFolder) -and (Test-Path ($vc60ExecutableFolder + "MSDEV.EXE")))) {
@@ -151,23 +180,29 @@ function make {
         $SourceDir,
         $OutputDir
     )
-    $cmakeOptions = @(
-        ('"'+$SourceDir+'"'),
-        "-G",
-        '"Visual Studio 6"'
+
+    #此处删除该项注册表的作用为使编译器使用环境变量提供的构建环境, 不会出现安全问题。
+    Remove-Item -Path 'HKCU:\Software\Microsoft\DevStudio\6.0\Build System\Components\Platforms\Win32 (x86)\Directories'
+
+    Set-Location -Path $OutputDir
+    Add-Type -TypeDefinition $scriptCode -Language CSharp
+    [Program]::Makefile(
+        ($installFolder + "VCVARS32.BAT"), 
+        ($OutputDir + "\AUTOMATE.BAT"), 
+        $SourceDir,
+        $Project,
+        $Target,
+        $vc60Folder
     )
-    $compileOptions = @(
-        ($Project + ".dsw"),
-        "/make",
-        ('"'+ $Project + " - Win32 " + $Target + '"')
-    )
-    Start-Process -FilePath "cmake" -WorkingDirectory $OutputDir -ArgumentList $cmakeOptions -NoNewWindow -Wait
-    Start-Process -FilePath "msdev" -WorkingDirectory $OutputDir -ArgumentList $compileOptions -NoNewWindow -Wait
+
+    Start-Process -FilePath ".\AUTOMATE.BAT" -NoNewWindow -Wait
 }
 
 if($args.Count -ge 4){
     make -Project $args[0] -Target $args[1] -SourceDir $args[2] -OutputDir $args[3]
 }
+
+
 
 
 
