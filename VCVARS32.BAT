@@ -32,4 +32,4 @@ set VcOsDir=
 set VSCommonDir=
 
 start /wait /b cmake "{3}" -G "Visual Studio 6"
-start /wait /b MSDEV {4}.dsw /USEENV /MAKE "{4} - Win32 {5}" 
+start /wait /b MSDEV {4}.dsw /USEENV /MAKE "ALL_BUILD - Win32 {5}" 
